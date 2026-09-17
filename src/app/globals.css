@@ -1,26 +1,376 @@
 @import "tailwindcss";
 
+/* ============================================================
+   AMANAH OUTREACH VOICE — design tokens
+   Derived from the official brand identity (Amanah Outreach Voice
+   brand presentation): Foundation Gold, Deep Navy, Warm Ivory.
+   ============================================================ */
+
+@theme {
+  /* --- Brand core --- */
+  --color-navy: #0e2a43;
+  --color-navy-deep: #091d2f;
+  --color-navy-soft: #1b3d5c;
+  --color-navy-mist: #5b7893;
+
+  --color-gold: #d6aa29;
+  --color-gold-deep: #b98f18;
+  --color-gold-light: #e8c766;
+
+  --color-ivory: #f9f5e9;
+  --color-ivory-deep: #f1ead6;
+  --color-bone: #e6dcc4;
+
+  --color-ink: #12100c;
+  --color-paper: #ffffff;
+
+  /* --- Typography (stacks are also pinned on :root below) --- */
+  --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-sans: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
+
+  /* --- Motion --- */
+  --ease-amanah: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Pinned here as well as in @theme: Tailwind tree-shakes theme keys that no
+     generated utility references, and these are consumed by hand-written CSS. */
+  --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-sans: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
+
+  --shell: 1440px;
+  --gutter: 1.25rem;
+  --rule: rgba(14, 42, 67, 0.14);
+  --rule-invert: rgba(249, 245, 233, 0.16);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@media (min-width: 768px) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --gutter: 2.5rem;
+  }
+}
+@media (min-width: 1280px) {
+  :root {
+    --gutter: 4rem;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  /* ============================================================
+     Base
+     ============================================================ */
+
+  * {
+    border-color: var(--rule);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: auto; /* Lenis owns smooth scrolling */
+  }
+
+  body {
+    background: var(--color-ivory);
+    color: var(--color-navy);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-navy);
+  }
+
+  /* Focus: a gold hairline ring, never a browser-blue blob. */
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+}
+
+@layer components {
+  /* ============================================================
+     Typography primitives
+     ============================================================ */
+
+  .font-display {
+    font-family: var(--font-display);
+    font-weight: 300;
+    letter-spacing: -0.015em;
+  }
+
+  /* Editorial display scale — fluid, no jumps between breakpoints. */
+  .t-display {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(2.75rem, 7.2vw, 7.5rem);
+    line-height: 0.96;
+    letter-spacing: -0.025em;
+  }
+
+  .t-h1 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(2.25rem, 5.2vw, 4.75rem);
+    line-height: 1.02;
+    letter-spacing: -0.022em;
+  }
+
+  .t-h2 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(1.875rem, 3.8vw, 3.5rem);
+    line-height: 1.08;
+    letter-spacing: -0.018em;
+  }
+
+  .t-h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.375rem, 2.1vw, 1.875rem);
+    line-height: 1.18;
+    letter-spacing: -0.012em;
+  }
+
+  /* The oversized serif statement, used sparingly. */
+  .t-statement {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(2rem, 4.4vw, 4rem);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+  }
+
+  /* Small caps label — the connective tissue of the whole site. */
+  .t-label {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .t-lead {
+    font-size: clamp(1.0625rem, 1.35vw, 1.3125rem);
+    line-height: 1.62;
+    font-weight: 350;
+    letter-spacing: -0.005em;
+  }
+
+  .t-body {
+    font-size: 1rem;
+    line-height: 1.72;
+    font-weight: 350;
+    letter-spacing: -0.003em;
+  }
+
+  .t-small {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    font-weight: 350;
+  }
+
+  /* Tabular figures for every number the reader may compare. */
+  .t-num {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* ============================================================
+     Layout primitives
+     ============================================================ */
+
+  .shell {
+    width: 100%;
+    max-width: var(--shell);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .shell-wide {
+    width: 100%;
+    max-width: 1760px;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .measure {
+    max-width: 34rem;
+  }
+  .measure-wide {
+    max-width: 44rem;
+  }
+
+  /* A hairline rule that reads as architectural, not as a border. */
+  .rule-t {
+    border-top: 1px solid var(--rule);
+  }
+  .rule-b {
+    border-bottom: 1px solid var(--rule);
+  }
+  .on-navy .rule-t,
+  .on-navy .rule-b {
+    border-color: var(--rule-invert);
+  }
+
+  /* ============================================================
+     Pattern surfaces
+     The brand patterns are structural texture, never wallpaper:
+     3–8% opacity, large scale, always behind content.
+     ============================================================ */
+
+  .pattern-surface {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-repeat: repeat;
+    background-size: 620px 620px;
+  }
+
+  @media (max-width: 767px) {
+    .pattern-surface {
+      background-size: 360px 360px;
+    }
+  }
+
+  /* ============================================================
+     Gold line link — an animated underline, not a button
+     ============================================================ */
+
+  .link-gold {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 2px;
+  }
+
+  .link-gold::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.35;
+    transform: scaleX(1);
+    transform-origin: right;
+    transition:
+      transform 0.55s var(--ease-amanah),
+      opacity 0.55s var(--ease-amanah);
+  }
+
+  .link-gold::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--color-gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.65s var(--ease-amanah);
+    transition-delay: 0.08s;
+  }
+
+  .link-gold:hover::after,
+  .link-gold:focus-visible::after {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  .link-gold:hover::before,
+  .link-gold:focus-visible::before {
+    transform: scaleX(1);
+  }
+
+  /* ============================================================
+     Imagery treatment — muted at rest, full warmth on reveal
+     ============================================================ */
+
+  .img-warm {
+    filter: saturate(0.82) contrast(1.02);
+    transition: filter 1.1s var(--ease-soft);
+  }
+  .group:hover .img-warm,
+  .img-warm[data-warm="true"] {
+    filter: saturate(1.04) contrast(1.03);
+  }
+
+  /* ============================================================
+     Scrollbar — quiet, brand-tinted
+     ============================================================ */
+
+  @media (pointer: fine) {
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--color-ivory-deep);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(14, 42, 67, 0.28);
+      border: 3px solid var(--color-ivory-deep);
+      border-radius: 99px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--color-gold);
+    }
+  }
+
+  /* ============================================================
+     Reduced motion — the whole choreography collapses to
+     plain, instantly-legible content.
+     ============================================================ */
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+    .marquee-track {
+      animation: none !important;
+    }
+  }
+}
+
+/* ============================================================
+   Marquee — used once, slowly
+   ============================================================ */
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: amanah-marquee 46s linear infinite;
+}
+
+@keyframes amanah-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* ============================================================
+   Utility
+   ============================================================ */
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
